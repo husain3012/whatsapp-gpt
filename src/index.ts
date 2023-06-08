@@ -123,7 +123,7 @@ async function main() {
     }
 
     if (!chatgptEnabled || !trusted_numbers.has(from)) return;
-    if (text.length >= 128 || text.length<=3 || !text.startsWith("ai")) return;
+    if (text.length >= 128 || text.length<=3 || !text.toLowerCase().startsWith("ai")) return;
 
     
     await sock.sendMessage(fromID, { text: await generate_reply(from, text.slice(2)) });
