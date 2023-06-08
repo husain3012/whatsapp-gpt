@@ -22,7 +22,6 @@ const generate_reply = async (from: string, text: string) => {
     ],
   });
   const choices = completion.data.choices;
-  console.log(completion.data.choices)
 
   return choices[Math.floor(Math.random() * choices.length)].message.content;
 };
