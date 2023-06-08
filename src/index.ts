@@ -107,25 +107,31 @@ async function main() {
 
   sock.ev.on("messages.upsert", async (m) => {
     // console.log("Got Message", JSON.stringify(m, undefined, 2))
-    if (m.messages.length == 0) return;
-    const text =
-      m.messages[0].message.extendedTextMessage?.text ||
-      m.messages[0].message?.conversation;
-    const fromID = m.messages[0].key.remoteJid;
-    const from = fromID.split("@")[0];
-
-    if (m.messages[0].key.fromMe) {
-      if (!text.startsWith("!")) return;
-      const resp = await command_handler(text.slice(1));
-      sock.sendMessage(fromID, { text: resp });
-      return;
+  
+    try {
+      if (m.messages.length == 0) return;
+      const text =
+        m.messages[0].message?.extendedTextMessage?.text ||
+        m.messages[0].message?.conversation;
+      const fromID = m.messages[0].key.remoteJid;
+      const from = fromID.split("@")[0];
+  
+      if (m.messages[0].key.fromMe) {
+        if (!text.startsWith("!")) return;
+        const resp = await command_handler(text.slice(1));
+        sock.sendMessage(fromID, { text: resp });
+        return;
+      }
+  
+      if (!chatgptEnabled || !trusted_numbers.has(from)) return;
+      if (text.length >= 128 || text.length<=3 || !text.toLowerCase().startsWith("ai")) return;
+      console.log(`Generating response for: ${text}`)
+  
+      
+      await sock.sendMessage(fromID, { text: await generate_reply(from, text.slice(2)) });
+    } catch (error) {
+      console.log(error)
     }
-
-    if (!chatgptEnabled || !trusted_numbers.has(from)) return;
-    if (text.length >= 128 || text.length<=3 || !text.toLowerCase().startsWith("ai")) return;
-
-    
-    await sock.sendMessage(fromID, { text: await generate_reply(from, text.slice(2)) });
   });
 }
 
