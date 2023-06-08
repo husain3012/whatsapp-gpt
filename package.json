@@ -4,17 +4,22 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "build": "rm -rf build/ && tsc",
+    "start":"yarn build && node build/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@adiwajshing/baileys": "^5.0.0",
+    "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.1",
+    "@types/ws": "^8.5.4",
     "dotenv": "^16.1.4",
     "openai": "^3.2.1",
     "qrcode-terminal": "^0.12.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "ws": "^8.13.0"
   }
 }

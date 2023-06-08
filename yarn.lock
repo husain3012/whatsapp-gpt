@@ -17,6 +17,11 @@
     protobufjs "^6.11.3"
     ws "^8.0.0"
 
+"@adiwajshing/keyed-db@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@adiwajshing/keyed-db/-/keyed-db-0.2.4.tgz#2a09e88fce20b2672deb60a7750c5fe3ab0dfd99"
+  integrity sha512-yprSnAtj80/VKuDqRcFFLDYltoNV8tChNwFfIgcf6PGD4sjzWIBgs08pRuTqGH5mk5wgL6PBRSsMCZqtZwzFEw==
+
 "@hapi/boom@^10.0.1":
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/@hapi/boom/-/boom-10.0.1.tgz#ebb14688275ae150aa6af788dbe482e6a6062685"
@@ -104,7 +109,7 @@
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.2.tgz#b74129719fc8d11c01868010082d483b7545591a"
   integrity sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==
 
-"@types/node@>=13.7.0":
+"@types/node@*", "@types/node@>=13.7.0":
   version "20.2.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.2.5.tgz#26d295f3570323b2837d322180dfbf1ba156fefb"
   integrity sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==
@@ -113,6 +118,13 @@
   version "10.17.60"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.60.tgz#35f3d6213daed95da7f0f73e75bcc6980e90597b"
   integrity sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==
+
+"@types/ws@^8.5.4":
+  version "8.5.4"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.4.tgz#bb10e36116d6e570dd943735f86c933c1587b8a5"
+  integrity sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==
+  dependencies:
+    "@types/node" "*"
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -492,7 +504,7 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
 
-ws@^8.0.0:
+ws@^8.0.0, ws@^8.13.0:
   version "8.13.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
   integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==

@@ -1,8 +1,12 @@
 {
 	"compilerOptions": {
 		"esModuleInterop": true,
-		"moduleResolution": "node"
+		"moduleResolution": "node",
+		"outDir": "build/",
+		"allowJs": true,
+		
 	},
+
 	"include": ["/**/*.ts"],
 	"exclude": ["node_modules"],
 	"ts-node": {
