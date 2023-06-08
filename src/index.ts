@@ -5,6 +5,7 @@ import makeWASocket, {
 import { Boom } from "@hapi/boom";
 import { Configuration, OpenAIApi } from "openai";
 import dotenv from "dotenv";
+import { readFromFile, writeToFile } from "./utils/file-handeling";
 
 dotenv.config();
 
@@ -17,45 +18,42 @@ const generate_reply = async (from: string, text: string) => {
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
-      { role: "user", content: `${from}: ${text}` }],
+      { role: "user", content: `${from}: ${text}` },
+    ],
   });
   const choices = completion.data.choices;
+  console.log(completion.data.choices)
 
-
-  return choices[Math.floor(Math.random()*choices.length)].message.content;
+  return choices[Math.floor(Math.random() * choices.length)].message.content;
 };
 
 // -----------------Globals-----------------
 let chatgptEnabled = false;
-const trusted_numbers = new Set<string>();
+const filename = 'numbers.txt'
+const trusted_numbers = readFromFile(filename);
+
 // -----------------------------------------
 
-const addToTrustedMember = (user: string) => {
-  trusted_numbers.add(user);
-  return `Added ${user} to trusted numbers`
-
-};
-const deleteFromTrustedMember = (user: string) => {
-  trusted_numbers.delete(user);
-  return `Removed ${user} from trusted numbers`
-
-};
-const enableChatgpt = async() => {
+const addToTrustedMember = (user) => {
+    trusted_numbers.add(user);
+    writeToFile(filename, trusted_numbers);
+    return `Added ${user} to trusted numbers`;
+  };
+  
+  const deleteFromTrustedMember = (user) => {
+    trusted_numbers.delete(user);
+    writeToFile(filename, trusted_numbers);
+    return `Removed ${user} from trusted numbers`;
+  };
+  
+const enableChatgpt = async () => {
   chatgptEnabled = true;
-  const completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [
-      { role: "user", content: `Pretend to be a indian engineering boy from now on` }],
-  });
-  console.log(completion.data.choices)
 
-  return "Chat GPT Enabled"
-
-
+  return "Chat GPT Enabled";
 };
 const disableChatgpt = () => {
   chatgptEnabled = false;
-  return "Chat GPT Disabled"
+  return "Chat GPT Disabled";
 };
 
 const commands = {
@@ -65,19 +63,18 @@ const commands = {
   disable: disableChatgpt,
 };
 
-const command_handler = async (text)  : Promise<string> =>  {
-    const tokens = text.split(' ')
-    const cmd = tokens[0];
-    const args = tokens.slice(1);
+const command_handler = async (text): Promise<string> => {
+  const tokens = text.split(" ");
+  const cmd = tokens[0];
+  const args = tokens.slice(1);
 
-    if(commands[cmd]===undefined) return "Invalid Command";
-    try{
-        return commands[cmd](...args);
-    }catch{
-        console.log("Invalid command")
-        return "Invalid Command"
-    }
-
+  if (commands[cmd] === undefined) return "Invalid Command";
+  try {
+    return commands[cmd](...args);
+  } catch {
+    console.log("Invalid command");
+    return "Invalid Command";
+  }
 };
 
 async function main() {
@@ -109,34 +106,27 @@ async function main() {
     }
   });
 
-
-
-
-
   sock.ev.on("messages.upsert", async (m) => {
     // console.log("Got Message", JSON.stringify(m, undefined, 2))
     if (m.messages.length == 0) return;
     const text =
       m.messages[0].message.extendedTextMessage?.text ||
       m.messages[0].message?.conversation;
-      const fromID = m.messages[0].key.remoteJid
+    const fromID = m.messages[0].key.remoteJid;
     const from = fromID.split("@")[0];
 
     if (m.messages[0].key.fromMe) {
       if (!text.startsWith("!")) return;
       const resp = await command_handler(text.slice(1));
-      sock.sendMessage(fromID, {text:resp}) 
+      sock.sendMessage(fromID, { text: resp });
       return;
     }
 
-    if(!chatgptEnabled || !trusted_numbers.has(from)) return;
-    if(text.length>128) return;
-    await sock.sendMessage(fromID, {text:await generate_reply(from, text)}) 
-
+    if (!chatgptEnabled || !trusted_numbers.has(from)) return;
+    if (text.length >= 128 || text.length<=3 || !text.startsWith("ai")) return;
 
     
-
-
+    await sock.sendMessage(fromID, { text: await generate_reply(from, text.slice(2)) });
   });
 }
 
