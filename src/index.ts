@@ -58,7 +58,7 @@ const disableChatgpt = () => {
 const getStatus = () => {
   const status = `
   ChatGPT Enabled: ${chatgptEnabled}
-  Trusted Contacts: \n
+  Trusted Contacts:\n
   ${Array.from(trusted_numbers).join('\n')}
   `
   return status;
@@ -85,6 +85,7 @@ const command_handler = async (text): Promise<string> => {
   }
 };
 
+let tries=0;
 async function main() {
   const { state, saveCreds } = await useMultiFileAuthState("auth_info_baileys");
   const sock = makeWASocket({
@@ -92,6 +93,7 @@ async function main() {
     auth: state,
   });
   sock.ev.on("creds.update", saveCreds);
+
   sock.ev.on("connection.update", (update) => {
     const { connection, lastDisconnect } = update;
     if (connection === "close") {
@@ -106,7 +108,8 @@ async function main() {
         shouldReconnect
       );
       // reconnect if not logged out
-      if (shouldReconnect) {
+      if (tries<3 && shouldReconnect) {
+        tries++;
         main();
       }
     } else if (connection === "open") {
