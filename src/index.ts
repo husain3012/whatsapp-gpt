@@ -55,11 +55,20 @@ const disableChatgpt = () => {
   return "Chat GPT Disabled";
 };
 
+const getStatus = () => {
+  const status = `
+  ChatGPT Enabled: ${chatgptEnabled}
+  Trusted Contacts: \n
+  ${Array.from(trusted_numbers).join('\n')}
+  `
+  return status;
+}
 const commands = {
   add: addToTrustedMember,
   remove: deleteFromTrustedMember,
   enable: enableChatgpt,
   disable: disableChatgpt,
+  status: getStatus
 };
 
 const command_handler = async (text): Promise<string> => {
