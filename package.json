@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node src/index.ts",
     "build": "rm -rf build/ && tsc",
-    "start":"yarn build && node build/index.js"
+    "start":"node build/index.js",
+    "pm2":"pm2 start npm --name 'husain3012/whatsapp-gpt' -- start"
   },
   "keywords": [],
   "author": "",
